@@ -1706,12 +1706,12 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TRIGGER IF EXISTS " + Tables.RAW_CONTACTS + "_marked_deleted;");
         db.execSQL("CREATE TRIGGER " + Tables.RAW_CONTACTS + "_marked_deleted "
                 + "   AFTER UPDATE ON " + Tables.RAW_CONTACTS
+                + "   WHEN NEW.version <> (OLD.version + 1) AND NEW." + RawContacts.DELETED + " != OLD." + RawContacts.DELETED
                 + " BEGIN "
                 + "   UPDATE " + Tables.RAW_CONTACTS
                 + "     SET "
                 +         RawContacts.VERSION + "=OLD." + RawContacts.VERSION + "+1 "
-                + "     WHERE " + RawContacts._ID + "=OLD." + RawContacts._ID
-                + "       AND NEW." + RawContacts.DELETED + "!= OLD." + RawContacts.DELETED + ";"
+                + "     WHERE " + RawContacts._ID + "=OLD." + RawContacts._ID + ";"
                 + " END");
 
         db.execSQL("DROP TRIGGER IF EXISTS " + Tables.DATA + "_updated;");
